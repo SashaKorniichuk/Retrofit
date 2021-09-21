@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+ <LinearLayout
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     android:orientation="vertical">
+
+  <Button
+      android:id="@+id/recyclerButton"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:onClick="recyclerClick"
+      android:text="Recycler" />
+
+  <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/recycler"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+
+      >
+
+  </androidx.recyclerview.widget.RecyclerView>
+
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="70dp">
+
+   <Button
+       android:id="@+id/listViewbutton2"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:onClick="listViewClick"
+       android:text="ListView" />
+
+  </RelativeLayout>
+
+  <ListView
+      android:id="@+id/listViewitems"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
+
+ </LinearLayout>
+
+</FrameLayout>
