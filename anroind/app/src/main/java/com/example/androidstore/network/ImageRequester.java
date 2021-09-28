@@ -19,30 +19,30 @@ public class ImageRequester {
     private final int maxByteSize;
 
     private ImageRequester() {
-        context = HomeApplication.getAppContext();
-        this.requestQueue = Volley.newRequestQueue(context);
-        this.requestQueue.start();
-        this.maxByteSize = calculateMaxByteSize();
+        context = HomeApplication.getAppContext();//отримуємо контекст
+        this.requestQueue = Volley.newRequestQueue(context);//створюємо чергу
+        this.requestQueue.start();//Стартуємо чергу
+        this.maxByteSize = calculateMaxByteSize();//встановлюємо максимальний розмір
         this.imageLoader =
-                new ImageLoader(
+                new ImageLoader(//створюємо загрузчик
                         requestQueue,
                         new ImageLoader.ImageCache() {
                             private final LruCache<String, Bitmap> lruCache =
                                     new LruCache<String, Bitmap>(maxByteSize) {
                                         @Override
                                         protected int sizeOf(String url, Bitmap bitmap) {
-                                            return bitmap.getByteCount();
+                                            return bitmap.getByteCount();//отримуємо кількість байтів
                                         }
                                     };
 
                             @Override
                             public synchronized Bitmap getBitmap(String url) {
-                                return lruCache.get(url);
+                                return lruCache.get(url);//отримуємо картинку
                             }
 
                             @Override
                             public synchronized void putBitmap(String url, Bitmap bitmap) {
-                                lruCache.put(url, bitmap);
+                                lruCache.put(url, bitmap);//сетимо картинку
                             }
                         });
     }

@@ -1,20 +1,38 @@
 package com.example.androidstore;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.app.ListActivity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.android.volley.toolbox.NetworkImageView;
+import com.example.androidstore.constans.Urls;
 import com.example.androidstore.dto.ProductDTO;
+import com.example.androidstore.dto.ProductImageDTO;
+import com.example.androidstore.network.ImageRequester;
+import com.example.androidstore.network.services.ListViewAdapter;
 import com.example.androidstore.network.services.ProductAdapter;
 import com.example.androidstore.network.services.ProductService;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.Spliterator;
+import java.util.function.UnaryOperator;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,12 +42,11 @@ public class MainActivity extends AppCompatActivity {
 
 private RecyclerView itemList;
 private ProductAdapter adapter;
-
+private ListViewAdapter listAdapter;
 private ListView listView;
+public static Activity context;
+public EditText index;
 
-    //private TextView txtinfo;
-    //private ImageRequester imageRequester;
-    //private NetworkImageView myImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,15 +56,8 @@ private ListView listView;
         LinearLayoutManager layoutManager=new LinearLayoutManager(this);
         itemList.setLayoutManager(layoutManager);
         itemList.setHasFixedSize(true);
-
-
-
-       // String url = Urls.BASE + "/images/manul.jpg";
-       // imageRequester = ImageRequester.getInstance();
-       // myImage = findViewById(R.id.myimg);
-       // imageRequester.setImageFromUrl(myImage, url);
-
-        //txtinfo=findViewById(R.id.txtinfo);
+        context=this;
+        index=findViewById((R.id.index));
 
 
     }
@@ -56,20 +66,20 @@ private ListView listView;
     {
         ProductService.getInstance()
                 .getProductsApi()
-                .all()
-                .enqueue( new Callback<List<ProductDTO>>(){
+                .getPostWithID(1)
+                .enqueue( new Callback<List<ProductImageDTO>>(){
                     @Override
-                    public void onResponse(Call<List<ProductDTO>> call, Response<List<ProductDTO>> response) {
-                        System.out.println("ss");
+                    public void onResponse(Call<List<ProductImageDTO>> call, Response<List<ProductImageDTO>> response) {
                         if(response.isSuccessful())
                         {
-                            List<ProductDTO> body=response.body();
+                            System.out.println("ss");
+                            List<ProductImageDTO> body=response.body();
                             adapter=new ProductAdapter(body);
                             itemList.setAdapter(adapter);
                         }
                     }
                     @Override
-                    public void onFailure(Call<List<ProductDTO>> call, Throwable t) {
+                    public void onFailure(Call<List<ProductImageDTO>> call, Throwable t) {
                         System.out.println(t.getMessage());
                     }
                 });
@@ -77,29 +87,26 @@ private ListView listView;
 
     public void listViewClick(View v)
     {
+        int i=Integer.parseInt(index.getText().toString());
+        if(i<0)
+        {
+            i=0;
+        }
         ProductService.getInstance()
                 .getProductsApi()
-                .all()
-                .enqueue( new Callback<List<ProductDTO>>(){
+                .getPostWithID(i)
+                .enqueue( new Callback<List<ProductImageDTO>>(){
                     @Override
-                    public void onResponse(Call<List<ProductDTO>> call, Response<List<ProductDTO>> response) {
-                        System.out.println("ss");
+                    public void onResponse(Call<List<ProductImageDTO>> call, Response<List<ProductImageDTO>> response) {
                         if(response.isSuccessful())
                         {
-                            List<ProductDTO> body=response.body();
-                            ArrayList<String> items=new ArrayList<>() ;
-
-                            for (int i=0;i<body.size();i++)
-                            {
-                                items.add(body.get(i).getName()+" Price: "+body.get(i).getPrice());
-                            }
-
-                            ArrayAdapter adapter=new ArrayAdapter(v.getContext(), android.R.layout.simple_list_item_1,items);
-                            listView.setAdapter(adapter);
+                            List<ProductImageDTO> body=response.body();
+                        listAdapter=new ListViewAdapter(context,body);
+                        listView.setAdapter(listAdapter);
                         }
                     }
                     @Override
-                    public void onFailure(Call<List<ProductDTO>> call, Throwable t) {
+                    public void onFailure(Call<List<ProductImageDTO>> call, Throwable t) {
                         System.out.println(t.getMessage());
                     }
                 });

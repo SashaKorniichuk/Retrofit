@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Web.Store.Data;
+using Web.Store.Data.Entities;
 
 namespace Web.Store
 {
@@ -37,6 +39,13 @@ namespace Web.Store
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Web.Store", Version = "v1" });
             });
 
+            services.AddIdentity<AppUser, AppRole>(config =>
+            {
+                config.Password.RequireNonAlphanumeric = false;
+                config.SignIn.RequireConfirmedEmail = true; 
+            })
+           .AddEntityFrameworkStores<EFAppContext>()
+           .AddDefaultTokenProviders();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

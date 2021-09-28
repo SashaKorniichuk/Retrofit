@@ -27,23 +27,39 @@
 
   </androidx.recyclerview.widget.RecyclerView>
 
+  <Button
+      android:id="@+id/listViewbutton2"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:onClick="listViewClick"
+      android:text="ListView" />
+
   <RelativeLayout
       android:layout_width="match_parent"
       android:layout_height="70dp">
 
-   <Button
-       android:id="@+id/listViewbutton2"
+   <EditText
+       android:id="@+id/index"
        android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:onClick="listViewClick"
-       android:text="ListView" />
+       android:layout_height="57dp"
+       android:layout_alignParentStart="true"
+       android:layout_alignParentEnd="true"
+       android:layout_alignParentBottom="true"
+       android:layout_marginStart="0dp"
+       android:layout_marginEnd="0dp"
+       android:layout_marginBottom="13dp"
+       android:ems="10"
+       android:hint="index"
+       android:inputType="number" />
 
   </RelativeLayout>
+
 
   <ListView
       android:id="@+id/listViewitems"
       android:layout_width="match_parent"
-      android:layout_height="match_parent" />
+      android:layout_height="wrap_content" />
+
 
  </LinearLayout>
 
